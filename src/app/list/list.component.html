@@ -1,0 +1,10 @@
+
+<h1>Combo Projects</h1>
+
+<ul>
+    <li *ngFor="let project of retrievedComboProjects">
+        <p class="remoteType"> Remote Type: {{ project.src_type }} </p>
+        <p class="remoteHash"> Hash: {{ project.commit_hash }} </p>
+        <a href="{{ project.remote_url }}" class="site"> link </a>
+    </li>
+</ul>
