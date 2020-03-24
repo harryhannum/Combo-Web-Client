@@ -1,10 +1,35 @@
-
 <h1>Combo Projects</h1>
 
-<ul>
-    <li *ngFor="let project of retrievedComboProjects">
-        <p class="remoteType"> Remote Type: {{ project.src_type }} </p>
-        <p class="remoteHash"> Hash: {{ project.commit_hash }} </p>
-        <a href="{{ project.remote_url }}" class="site"> link </a>
-    </li>
-</ul>
+<mat-accordion>
+  <!--List of projects-->
+  <mat-expansion-panel *ngFor="let versionsMap of comboProjects | keyvalue">
+    <mat-expansion-panel-header>
+      {{ versionsMap.key }}
+    </mat-expansion-panel-header>
+
+    <!--List of versions for each project-->
+    <mat-expansion-panel *ngFor="let version of versionsMap.value | keyvalue: CompareSemanticVersionOfKeys">
+      <mat-expansion-panel-header>
+        {{ version.key }}
+      </mat-expansion-panel-header>
+      <p class="hash"> Hash: {{ version.value?.baseVersionInformation?.hash }} </p>
+      <p class="size"> Size: {{ version.value?.baseVersionInformation?.size }} </p>
+      
+      <div [ngSwitch]="version?.value?.additionalVersionInformation?.src_type">
+        <div *ngSwitchCase="GIT">
+          <p class="srcType"> Source Type: {{ version.value?.additionalVersionInformation["src_type"] }} </p>
+          <p class="commitHash"> Commit Hash: {{ version.value?.additionalVersionInformation["commit_hash"] }} </p>
+          <a href="{{ version.value.additionalVersionInformation['remote_url'] }}" class="site"> {{ version.value.additionalVersionInformation['remote_url'] }} </a>
+        </div>
+
+        <div *ngSwitchDefault>
+          <div *ngFor="let property of version.value?.additionalVersionInformation | keyvalue">
+            <p class="{{ property.key }}" ng-switch-default> {{ property.key }}: {{ property.value }} </p>
+          </div>
+        </div>
+      </div>
+
+    </mat-expansion-panel>
+
+  </mat-expansion-panel>
+</mat-accordion>
