@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ComboApiService } from '../combo-api.service'
 
 import * as compareVersions from 'compare-versions'
+import { verifyHostBindings } from '@angular/compiler';
 
 interface BaseVersionInformation {
   hash: string;
@@ -31,6 +32,9 @@ export class ListComponent implements OnInit {
   readonly PROJECT_TITLE_REGEX_SEMANTIC_VERSION_GROUP_ID = 2
 
   readonly GIT = "git";
+  projectSearchValue : string = ""
+  versionSearchValue : string = ""
+
   comboProjects : Map<string, Map<string, ProjectVersion>> = new Map();
 
   constructor(private _comboService: ComboApiService) { }
@@ -49,6 +53,17 @@ export class ListComponent implements OnInit {
 
     console.log(this.comboProjects);
   }
+
+  SearchResultsContains(input : string, result: string) : boolean
+  {
+    return input.toLowerCase().replace(" ", "").includes(result.toLowerCase().replace(" ", ""))
+  }
+
+  SearchResultStartsWith(input : string, result: string) : boolean
+  {
+    return input.toLowerCase().replace(" ", "").startsWith(result.toLowerCase().replace(" ", ""))
+  }
+
 
   ParseAvaliableVersionsBaseInfo(data: Object) : Array<[string, string]>
   {

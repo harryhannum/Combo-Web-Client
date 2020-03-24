@@ -1,35 +1,55 @@
 <h1>Combo Projects</h1>
 
+<mat-form-field class="example-form-field">
+  <mat-label>Search Project</mat-label>
+  <input matInput type="text" [(ngModel)]="projectSearchValue">
+  <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="projectSearchValue=''">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
+<mat-form-field class="example-form-field">
+  <mat-label>Search Version</mat-label>
+  <input matInput type="text" [(ngModel)]="versionSearchValue">
+  <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="versionSearchValue=''">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
 <mat-accordion>
   <!--List of projects-->
-  <mat-expansion-panel *ngFor="let versionsMap of comboProjects | keyvalue">
-    <mat-expansion-panel-header>
-      {{ versionsMap.key }}
-    </mat-expansion-panel-header>
-
-    <!--List of versions for each project-->
-    <mat-expansion-panel *ngFor="let version of versionsMap.value | keyvalue: CompareSemanticVersionOfKeys">
+  <ng-template *ngFor="let versionsMap of comboProjects | keyvalue"
+   [ngIf]="SearchResultsContains(versionsMap.key, projectSearchValue)">
+  <mat-expansion-panel>
       <mat-expansion-panel-header>
-        {{ version.key }}
+          <h3>{{ versionsMap.key }} </h3>
       </mat-expansion-panel-header>
-      <p class="hash"> Hash: {{ version.value?.baseVersionInformation?.hash }} </p>
-      <p class="size"> Size: {{ version.value?.baseVersionInformation?.size }} </p>
-      
-      <div [ngSwitch]="version?.value?.additionalVersionInformation?.src_type">
-        <div *ngSwitchCase="GIT">
-          <p class="srcType"> Source Type: {{ version.value?.additionalVersionInformation["src_type"] }} </p>
-          <p class="commitHash"> Commit Hash: {{ version.value?.additionalVersionInformation["commit_hash"] }} </p>
-          <a href="{{ version.value.additionalVersionInformation['remote_url'] }}" class="site"> {{ version.value.additionalVersionInformation['remote_url'] }} </a>
-        </div>
 
-        <div *ngSwitchDefault>
-          <div *ngFor="let property of version.value?.additionalVersionInformation | keyvalue">
-            <p class="{{ property.key }}" ng-switch-default> {{ property.key }}: {{ property.value }} </p>
-          </div>
-        </div>
-      </div>
+      <!--List of versions for each project-->
+      <ng-template *ngFor="let version of versionsMap.value | keyvalue: CompareSemanticVersionOfKeys"
+       [ngIf]="SearchResultStartsWith(version.key, versionSearchValue)">
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+            <h4> {{ version.key }} </h4>
+            </mat-expansion-panel-header>
+            <p class="hash"> Hash: {{ version.value?.baseVersionInformation?.hash }} </p>
+            <p class="size"> Size: {{ version.value?.baseVersionInformation?.size }} </p>
+            
+            <div [ngSwitch]="version?.value?.additionalVersionInformation?.src_type">
+              <div *ngSwitchCase="GIT">
+                <p class="srcType"> Source Type: {{ version.value?.additionalVersionInformation["src_type"] }} </p>
+                <p class="commitHash"> Commit Hash: {{ version.value?.additionalVersionInformation["commit_hash"] }} </p>
+                <a href="{{ version.value.additionalVersionInformation['remote_url'] }}" class="site"> {{ version.value.additionalVersionInformation['remote_url'] }} </a>
+              </div>
 
-    </mat-expansion-panel>
-
+              <div *ngSwitchDefault>
+                <div *ngFor="let property of version.value?.additionalVersionInformation | keyvalue">
+                  <p class="{{ property.key }}" ng-switch-default> {{ property.key }}: {{ property.value }} </p>
+                </div>
+              </div>
+            </div>
+        </mat-expansion-panel>
+      </ng-template>
   </mat-expansion-panel>
+  </ng-template>
 </mat-accordion>
