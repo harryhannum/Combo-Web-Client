@@ -3,6 +3,8 @@ import { ComboApiService } from '../combo-api.service'
 
 import * as compareVersions from 'compare-versions'
 import { verifyHostBindings } from '@angular/compiler';
+import { UploadSheetComponent } from '../upload-sheet/upload-sheet.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 interface BaseVersionInformation {
   hash: string;
@@ -37,7 +39,7 @@ export class ListComponent implements OnInit {
 
   comboProjects : Map<string, Map<string, ProjectVersion>> = new Map();
 
-  constructor(private _comboService: ComboApiService) { }
+  constructor(private _comboService: ComboApiService, private _bottomSheet: MatBottomSheet) { }
 
   ngOnInit(): void {
     this._comboService.getAvaliableVersions().subscribe(data => {
@@ -45,13 +47,18 @@ export class ListComponent implements OnInit {
       for (let i = 0; i < versionsParsed.length; i++)
       {
         let versionAndName = versionsParsed[i];
-        this._comboService.getProjectSource(versionAndName[0], versionAndName[1].replace(" ", "+")).subscribe(data => {
+        this._comboService.getProjectSource(versionAndName[0], versionAndName[1]).subscribe(data => {
           this.ParseAdditionalInfoFromServer(data, versionAndName);
         });
       }
     });
+  }
 
-    console.log(this.comboProjects);
+  openUploadSheet()
+  {
+    this._bottomSheet.open(UploadSheetComponent , {
+      data: this.comboProjects
+    });
   }
 
   SearchResultsContains(input : string, result: string) : boolean
@@ -63,7 +70,6 @@ export class ListComponent implements OnInit {
   {
     return input.toLowerCase().replace(" ", "").startsWith(result.toLowerCase().replace(" ", ""))
   }
-
 
   ParseAvaliableVersionsBaseInfo(data: Object) : Array<[string, string]>
   {
@@ -122,7 +128,7 @@ export class ListComponent implements OnInit {
   }
 
   CompareSemanticVersionOfKeys(a, b) {
-    return compareVersions(a.key, b.key);
+    return -1 * compareVersions(a.key, b.key);
   }
 
   SafeGet(versionMap: Map<string,ProjectVersion> , version: string) : Object
