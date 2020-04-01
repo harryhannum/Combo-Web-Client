@@ -16,6 +16,8 @@
   </button>
 </mat-form-field>
 
+<button mat-raised-button class="upload-project-button" (click)="openUploadSheet()">Upload New Project</button>
+
 <mat-accordion>
   <!--List of projects-->
   <ng-template *ngFor="let versionsMap of comboProjects | keyvalue"
@@ -39,7 +41,8 @@
               <div *ngSwitchCase="GIT">
                 <p class="srcType"> Source Type: {{ version.value?.additionalVersionInformation["src_type"] }} </p>
                 <p class="commitHash"> Commit Hash: {{ version.value?.additionalVersionInformation["commit_hash"] }} </p>
-                <a href="{{ version.value.additionalVersionInformation['remote_url'] }}" class="site"> {{ version.value.additionalVersionInformation['remote_url'] }} </a>
+                <a href="{{ version.value.additionalVersionInformation['remote_url'] }}"
+                 class="site"> {{ version.value.additionalVersionInformation['remote_url'] }} </a>
               </div>
 
               <div *ngSwitchDefault>
