@@ -106,7 +106,7 @@ export class ListComponent implements OnInit {
       return
     }
  
-    let addition_version_information = (JSON.parse(data.toString()) as Map<string, string>);
+    let addition_version_information = (data as Map<string, string>);
     this.comboProjects.get(versionAndName[1]).get(versionAndName[0]).additionalVersionInformation = addition_version_information
   }
   
