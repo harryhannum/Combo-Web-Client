@@ -1,0 +1,11 @@
+{
+    "manifest_format_version": "1.0",
+
+    "name": "Combo Web Client",
+    "version": "0.1.0",
+
+    "dependencies": [
+    ],
+
+    "output_directory": "contrib"
+}
