@@ -32,7 +32,16 @@
        [ngIf]="SearchResultStartsWith(version.key, versionSearchValue)">
         <mat-expansion-panel>
             <mat-expansion-panel-header>
-            <h4> {{ version.key }} </h4>
+              <div class="expension-panel">
+                <h4> {{ version.key }} </h4>
+                <div [ngSwitch]="version?.value?.additionalVersionInformation?.src_type">
+                <div *ngSwitchCase="GIT">
+                  <img src="../../assets/git_icon.png" class="version-icon" >
+                </div>
+                <div *ngSwitchDefault>
+                </div>
+                </div>
+              </div>
             </mat-expansion-panel-header>
             <p class="hash"> Hash: {{ version.value?.baseVersionInformation?.hash }} </p>
             <p class="size"> Size: {{ version.value?.baseVersionInformation?.size }} </p>
