@@ -2,6 +2,8 @@ import os
 
 def buildComboWebClient():
     try:
+	    os.mkdir("node_modules") 
+
         if os.system('ng --version') != 0:
             raise Exception('Angular is not installed on this computer')
 
@@ -11,7 +13,7 @@ def buildComboWebClient():
         os.system('npm install')
         os.system('ng build')
     except:
-        print("Something went wrong, fetching angular's version failed")
+        print("Something went wrong, couldn't build the angular project")
 
     print ("Build finished")
 
