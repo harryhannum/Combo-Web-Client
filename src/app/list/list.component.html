@@ -21,47 +21,92 @@
 <mat-accordion>
   <!--List of projects-->
   <ng-template *ngFor="let versionsMap of comboProjects | keyvalue"
-   [ngIf]="SearchResultsContains(versionsMap.key, projectSearchValue)">
-  <mat-expansion-panel>
+    [ngIf]="SearchResultsContains(versionsMap.key, projectSearchValue)">
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
-          <h3>{{ versionsMap.key }} </h3>
+        <h3>{{ versionsMap.key }} </h3>
       </mat-expansion-panel-header>
 
       <!--List of versions for each project-->
       <ng-template *ngFor="let version of versionsMap.value | keyvalue: CompareSemanticVersionOfKeys"
-       [ngIf]="SearchResultStartsWith(version.key, versionSearchValue)">
+        [ngIf]="SearchResultStartsWith(version.key, versionSearchValue)">
         <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <div class="expension-panel">
-                <h4> {{ version.key }} </h4>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <h3> {{ version.key }} </h3>
+            </mat-panel-title>
+            <div class="expension-panel">
+              <mat-panel-description>
                 <div [ngSwitch]="version?.value?.additionalVersionInformation?.src_type">
-                <div *ngSwitchCase="GIT">
-                  <img src="../../assets/git_icon.png" class="version-icon" >
+                  <div *ngSwitchCase="GIT">
+                    <img [src]="GetIconSource(version.value.additionalVersionInformation['remote_url'])" class="version-icon">
+                  </div>
+                  <div *ngSwitchDefault>
+                  </div>
                 </div>
-                <div *ngSwitchDefault>
+              </mat-panel-description>
+            </div>
+          </mat-expansion-panel-header>
+
+          <div [ngSwitch]="version?.value?.additionalVersionInformation?.src_type">
+            <div *ngSwitchCase="GIT">
+              <div class="src-type">
+                <div style="display: inline" class="property-key">
+                  Source Type:
                 </div>
-                </div>
-              </div>
-            </mat-expansion-panel-header>
-            <p class="hash"> Hash: {{ version.value?.baseVersionInformation?.hash }} </p>
-            <p class="size"> Size: {{ version.value?.baseVersionInformation?.size }} </p>
-            
-            <div [ngSwitch]="version?.value?.additionalVersionInformation?.src_type">
-              <div *ngSwitchCase="GIT">
-                <p class="srcType"> Source Type: {{ version.value?.additionalVersionInformation["src_type"] }} </p>
-                <p class="commitHash"> Commit Hash: {{ version.value?.additionalVersionInformation["commit_hash"] }} </p>
-                <a href="{{ version.value.additionalVersionInformation['remote_url'] }}"
-                 class="site"> {{ version.value.additionalVersionInformation['remote_url'] }} </a>
+                {{ version.value?.additionalVersionInformation["src_type"] }}
+                <br> <br>
               </div>
 
-              <div *ngSwitchDefault>
-                <div *ngFor="let property of version.value?.additionalVersionInformation | keyvalue">
-                  <p class="{{ property.key }}" ng-switch-default> {{ property.key }}: {{ property.value }} </p>
+              <div class="commit-hash">
+                <div style="display: inline" class="property-key">
+                  Commit Hash:
+                </div>
+                {{ version.value?.additionalVersionInformation["commit_hash"] }}
+                <br> <br>
+              </div>
+
+              <div class="remote-url">
+                <div style="display: inline" class="property-key">
+                  Remote URL:
+                </div>
+                <a href="{{ version.value.additionalVersionInformation['remote_url'] }}" class="site">
+                  {{ version.value.additionalVersionInformation['remote_url'] }} </a>
+                <br> <br>
+              </div>
+            </div>
+
+            <div *ngSwitchDefault>
+              <div *ngFor="let property of version.value?.additionalVersionInformation | keyvalue">
+                <div class="custom-property" ng-switch-default>
+                  <div style="display: inline" class="property-key">
+                    {{ property.key }}:
+                  </div>
+                  {{ property.value }}:
+                  <br> <br>
                 </div>
               </div>
             </div>
+
+            <div class="size">
+              <div style="display: inline" class="property-key">
+                Size:
+              </div>
+              {{ version.value?.baseVersionInformation?.size }}
+              <br> <br>
+            </div>
+
+            <div class="hash">
+              <div style="display: inline" class="property-key">
+                Hash:
+              </div>
+              {{ version.value?.baseVersionInformation?.hash }}
+              <br> <br>
+            </div>
+  
+          </div>
         </mat-expansion-panel>
       </ng-template>
-  </mat-expansion-panel>
+    </mat-expansion-panel>
   </ng-template>
 </mat-accordion>

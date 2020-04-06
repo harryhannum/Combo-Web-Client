@@ -44,6 +44,13 @@ ul {
 }
 
 .expension-panel{
-    width: 5000px;
-    display: flex;
+}
+
+.commit-hash, .src-type, .remote-url, .custom-property, .hash, .size {
+    font-size: large;
+}
+
+.property-key {
+    font-weight: 700;
+    color: #456d7c;
 }

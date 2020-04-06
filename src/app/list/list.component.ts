@@ -110,6 +110,27 @@ export class ListComponent implements OnInit {
     this.comboProjects.get(versionAndName[1]).get(versionAndName[0]).additionalVersionInformation = addition_version_information
   }
   
+  GetIconSource(remote_url : string) : string{
+    console.log(remote_url);
+
+    if (remote_url.includes("github"))
+    {
+      return "../../assets/github.png";
+    }
+
+    if (remote_url.includes("bitbucket"))
+    {
+      return "../../assets/bitbucket.png";
+    }
+
+    if (remote_url.includes("gitlab"))
+    {
+      return "../../assets/gitlab.png";
+    }
+    
+    return "../../assets/git.png";
+  }
+
   FetchVersionAndNameFromTitle(title: string) : [string, string]
   {
     var match = this.PROJECT_TITLE_REGEX.exec(title);
